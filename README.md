@@ -294,3 +294,4 @@ Task 4 blevt udført parralelt med Task 3, alt funktionalitet bortset fra arrays
 ## Bilag
 
 Dette er en test
+Test2
