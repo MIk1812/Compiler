@@ -1,5 +1,5 @@
 <center>
-<img src="https://i.imgur.com/mIFqWgX.png" alt="img" style="zoom:20%;" />
+<img src="https://i.imgur.com/mIFqWgX.png" alt="img" style="width:20%;" />
 </center>
 
 <br><br>
@@ -186,7 +186,7 @@ output y;
 
 ### Testcase 10
 
-En array længde initaliseres samt med en array af tilfældig defineret tal. For at koden kan køre er man nød til at implementere a[-1] . Deete gør at conditon i while lykken ikke fejler. Insertionsort algoritmen implementeres. Output kontrolleres for korrekte sortering. 
+En array længde initaliseres samt med en array af tilfældig defineret tal. For at koden kan køre er man nød til at implementere a[-1] . Dette gør at conditon i while lykken ikke fejler da vores parser kan ellers ikke finde variabel a[-1] i miljøet. Insertionsort algoritmen implementeres. Output kontrolleres for korrekte sortering. 
 
 ```java=
 n=5;
@@ -292,6 +292,3 @@ Task 4 blevt udført parralelt med Task 3, alt funktionalitet bortset fra arrays
 
 
 ## Bilag
-
-Dette er en test
-Test2
