@@ -1,7 +1,7 @@
 <center>
-<img src="https://i.imgur.com/mIFqWgX.png" alt="img" style="width:20%;" />
-</center>
+<img src="https://i.imgur.com/mIFqWgX.png" alt="img" width="200" />
 
+</center>
 <br><br>
 <center><font size="6">Danmark Tekniske Universitet</font></center>
 
@@ -213,7 +213,7 @@ output a[i];
 }
 ```
 
-| Forventet | Resultat |
+| Forventet                          |                    Resultat |
 | --------- | -------- |
 | 5.0, 6.0, 11.0, 12.0, 13.0         | 5.0, 6.0, 11.0, 12.0, 13.0         |
 
@@ -261,9 +261,10 @@ command : x=ID '=' e=expr ';'	         				# Assignment
 	| 'output' e=expr ';'            				# Output
         | 'while' '('c=condition')' p=program 	 		# WhileLoop
 	| 'if' '('c=condition')' 'then'? p=program 			# IfStatement
-	| 'for' '(' x=ID '=' n1=expr '..' n2=expr ')' p=program 	# ForLoop
+	| 'for' '(' x=expr '=' n1=expr '..' n2=expr ')' p=program 	# ForLoop
 	;
-``
+```
+#### Update
 
 ### Task 3
 
