@@ -75,7 +75,7 @@ class Interpreter extends AbstractParseTreeVisitor<Double> implements implVisito
     }
 
 
-    // -- EXPR --
+    // -- EXPRESSIONS --
 
 	//Constant
 	public Double visitConstant(implParser.ConstantContext ctx){

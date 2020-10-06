@@ -31,9 +31,9 @@ condition : 	  e1=expr '!=' e2=expr 			# Unequal
 		| e1=expr '>' e2=expr 			# GreaterThan
 		| e1=expr '<=' e2=expr 			# LessThanOrEqual
 		| e1=expr '>=' e2=expr 			# GreaterThanOrEqual
+		| '!' c=condition			# Not
 		| c1=condition '&&' c2=condition 	# And
 		| c1=condition '||' c2=condition 	# Or
-		| '!' c=condition			# Not
 		| '(' c=condition ')'			# ParenthesisCondition
 	  	;  
 
@@ -45,7 +45,6 @@ FLOAT : NUM+ ('.' NUM+)? ;
 
 ALPHA : [a-zA-Z_ÆØÅæøå] ;
 NUM   : [0-9] ;
-
 
 WHITESPACE : [ \n\t\r]+ -> skip;
 COMMENT    : '//'~[\n]*  -> skip;
