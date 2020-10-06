@@ -14,9 +14,9 @@
 <br>
 
 
-| <img src="https://lh6.googleusercontent.com/JsVqJdYmObrAgDTAZygNwALQXUUSL496brNcD-rNZg59xJdhOaYL5QFkzPd9zI9yXjUSd0l_A70zZKHZs0AG-_-JYKHNAhv8ZpC3HkbevnnEE89GUuJmURqoz7WCDOiATZQBrgSo" alt="img" style="zoom:8%;" /><br> <b>Mikkel Danielsen s183913</b> | ![img](https://lh5.googleusercontent.com/mGiheVfoHA6u79gCGW_s9nbAfGY-8EPSO1lYFwVwzH-jPyhjtPzLQYSlftJLGzz-miTUvX9jNeG4QPRYcGAst0OMPp8E7GfYNE8XdlbTxehAnJeFNftCaTZXyfzHCZBjawfOtwC0)<br><b>Volkan Isik s180103</b> <tr></tr> |
+| <img src="https://lh6.googleusercontent.com/JsVqJdYmObrAgDTAZygNwALQXUUSL496brNcD-rNZg59xJdhOaYL5QFkzPd9zI9yXjUSd0l_A70zZKHZs0AG-_-JYKHNAhv8ZpC3HkbevnnEE89GUuJmURqoz7WCDOiATZQBrgSo" alt="img" width="100"/><br> <b>Mikkel Danielsen s183913</b> | <img src="https://lh5.googleusercontent.com/mGiheVfoHA6u79gCGW_s9nbAfGY-8EPSO1lYFwVwzH-jPyhjtPzLQYSlftJLGzz-miTUvX9jNeG4QPRYcGAst0OMPp8E7GfYNE8XdlbTxehAnJeFNftCaTZXyfzHCZBjawfOtwC0" alt="img" width="100"/><br><b>Volkan Isik s180103</b> <tr></tr> |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| <img src="https://lh3.googleusercontent.com/cxw7Q3TX5pFLCv2p0Y5ZcUjLip1GlMQ2WrLItx8_RT5vUVbTgyxayjqfCLlKLERZVeOXDnjmqjuOsJ6VgCBX00ugI0eXKypyWMZrN-ZNM-4fdcNCo9FVeDL8hxJbLTuvfArri3Yq" alt="img" style="zoom:50%;" /><br><b> Mark Rune Mortensen s174881</b> | <img src="https://lh5.googleusercontent.com/OxyrzNS3-o_n0bRhTncrZ5CrW3OZWia7_tW-fXe3kaClld1zzlzXPGV7HdIYYjqWCtS3jRwcVPBxbH-aKmszcZrOZbKz6al_z7gOyovUOaXlaXEaDyHZj56DTmcGNv1HLeSV6JGl" alt="img" style="zoom:25%;" /><br><b>Muhammad Talha Butt s195475</b> |
+| <img src="https://lh3.googleusercontent.com/cxw7Q3TX5pFLCv2p0Y5ZcUjLip1GlMQ2WrLItx8_RT5vUVbTgyxayjqfCLlKLERZVeOXDnjmqjuOsJ6VgCBX00ugI0eXKypyWMZrN-ZNM-4fdcNCo9FVeDL8hxJbLTuvfArri3Yq" alt="img" width="100" /><br><b> Mark Rune Mortensen s174881</b> | <img src="https://lh5.googleusercontent.com/OxyrzNS3-o_n0bRhTncrZ5CrW3OZWia7_tW-fXe3kaClld1zzlzXPGV7HdIYYjqWCtS3jRwcVPBxbH-aKmszcZrOZbKz6al_z7gOyovUOaXlaXEaDyHZj56DTmcGNv1HLeSV6JGl" alt="img" width="100" /><br><b>Muhammad Talha Butt s195475</b> |
 
 
 <br><br>
@@ -213,9 +213,54 @@ output a[i];
 }
 ```
 
-| Forventet                          |                    Resultat |
+| Forventet                          |    Resultat               |
 | --------- | -------- |
-| 5.0, 6.0, 11.0, 12.0, 13.0         | 5.0, 6.0, 11.0, 12.0, 13.0         |
+| 5.0, 6.0, 11.0, 12.0, 13.0         | 5.0, 6.0, 11.0, 12.0, 13.0 |
+
+### Testcase 11
+Vi tester den udleverede impl_additional.txt fil
+
+
+```java= 
+/* Example program for impl that tests  of the features required in
+the assignment */
+
+n=49;
+k=6;
+result=1;
+
+while(n!=k && k!=0){
+  result=result*n/k;
+  n=n-1;
+  k=k-1;
+}   
+
+output result;
+
+n=100;
+
+for(i=2..n){
+  a[i]=1;
+}
+
+for(i=2..n){
+  if(a[i]==1){
+    output i;
+    j=2*i;
+    while(j<n){
+      a[j]=0;
+      j=j+i;
+    }
+  }
+}
+```
+|Forventet|Resultat|
+
+
+
+
+
+
 
 ---
 
@@ -265,7 +310,10 @@ command : x=ID '=' e=expr ';'	         				# Assignment
 	;
 ```
 #### Update
-
+ForLoop er ændret så man kan genkende variablen som forloopet iterer. Variablen kan nu defineres i  
+```ANTLR
+| 'for' '(' x=ID '=' n1=expr '..' n2=expr ')' p=program 	# ForLoop
+```
 ### Task 3
 
 Task 2 terorien er blevet brugt til at lave funktionaliteten for if then*, *for(i=0..2)* og *a[e]*
