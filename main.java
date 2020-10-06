@@ -47,85 +47,104 @@ public class main {
 class Interpreter extends AbstractParseTreeVisitor<Double> implements implVisitor<Double> {
 
     static Environment env = new Environment();
-    
+
+    // -- START --
+
+	//Start
     public Double visitStart(implParser.StartContext ctx){
-		for(implParser.CommandContext c:ctx.cs) visit(c);
-		return null;
-    };
 
-    public Double visitSingleCommand(implParser.SingleCommandContext ctx){
-		return visit(ctx.c);
+    	for(implParser.CommandContext c:ctx.cs) visit(c);
+
+    	return null;
     }
 
+    // -- PROGRAM --
+
+
+	//Single Command
+	public Double visitSingleCommand(implParser.SingleCommandContext ctx){
+    	return visit(ctx.c);
+	}
+
+	//MultipleCommands
     public Double visitMultipleCommands(implParser.MultipleCommandsContext ctx){
-		for(implParser.CommandContext c:ctx.cs) visit(c);
-		return null;
+
+    	for(implParser.CommandContext c:ctx.cs) visit(c);
+
+    	return null;
     }
-    
-    public Double visitAssignment(implParser.AssignmentContext ctx){
-		Double v=visit(ctx.e);
-		env.setVariable(ctx.x.getText(),v);
-		return null;
-    }
-    
-    public Double visitOutput(implParser.OutputContext ctx){
-		Double v=visit(ctx.e);
-		System.out.println(v);
-		return null;
-    }
-    
-    public Double visitParenthesisExpr(implParser.ParenthesisExprContext ctx){
-		return visit(ctx.e);
-    };
-    
-    public Double visitVariable(implParser.VariableContext ctx){
-		return env.getVariable(ctx.x.getText());
-    };
-    
-    public Double visitAddSub(implParser.AddSubContext ctx){
-		String sign = ctx.s.getText();
-		if(sign.equals("+"))
-			return visit(ctx.e1)+visit(ctx.e2);
-		else
-			return visit(ctx.e1)-visit(ctx.e2);
-    };
 
-    public Double visitMulDev(implParser.MulDevContext ctx){
-		String sign = ctx.s.getText();
-		if(sign.equals("*"))
-			return visit(ctx.e1)*visit(ctx.e2);
-		else
-			return visit(ctx.e1)/visit(ctx.e2);
-    };
-
-    public Double visitPrefix(implParser.PrefixContext ctx){
-
-    	String sign = ctx.s.getText();
-		Double num = Double.parseDouble(ctx.e.getText());
-
-		if(sign.equals("+"))
-			return num;
-		else
-			return -num;
-    };
-
-    public Double visitConstant(implParser.ConstantContext ctx){
-		return Double.parseDouble(ctx.c.getText());
-    };
 
     // -- EXPR --
 
+	//Constant
+	public Double visitConstant(implParser.ConstantContext ctx){
+		return Double.parseDouble(ctx.c.getText());
+	}
 
+	//MulDev
+	public Double visitMulDev(implParser.MulDevContext ctx){
+
+    	String sign = ctx.s.getText();
+
+    	if(sign.equals("*"))
+			return visit(ctx.e1)*visit(ctx.e2);
+		else
+			return visit(ctx.e1)/visit(ctx.e2);
+	}
+
+	//AddSub
+	public Double visitAddSub(implParser.AddSubContext ctx){
+
+    	String sign = ctx.s.getText();
+
+    	if(sign.equals("+"))
+			return visit(ctx.e1)+visit(ctx.e2);
+		else
+			return visit(ctx.e1)-visit(ctx.e2);
+	}
+
+	//ArrayGet
 	public Double visitArrayGet(implParser.ArrayGetContext ctx){
 
 		String id = ctx.x.getText();
 		int index = visit(ctx.e).intValue();
 
 		return env.getVariable(id+"["+index+"]");
-	};
+	}
+
+	//Prefix
+	public Double visitPrefix(implParser.PrefixContext ctx){
+
+		String sign = ctx.s.getText();
+		Double num = Double.parseDouble(ctx.e.getText());
+
+		if(sign.equals("+"))
+			return num;
+		else
+			return -num;
+	}
+
+	//Variable
+	public Double visitVariable(implParser.VariableContext ctx){
+    	return env.getVariable(ctx.x.getText());
+	}
+
+	//ParenthesisExpr
+	public Double visitParenthesisExpr(implParser.ParenthesisExprContext ctx){
+    	return visit(ctx.e);
+	}
 
 
     // -- COMMANDS --
+
+	public Double visitAssignment(implParser.AssignmentContext ctx){
+
+    	Double v=visit(ctx.e);
+		env.setVariable(ctx.x.getText(),v);
+
+		return null;
+	}
 
 	//ArraySet
 	public Double visitArraySet(implParser.ArraySetContext ctx){
@@ -135,9 +154,17 @@ class Interpreter extends AbstractParseTreeVisitor<Double> implements implVisito
 		Double equals = visit(ctx.e2);
 
 		env.setVariable(id+"["+index+"]",equals);
-		return null;
 
-	};
+		return null;
+	}
+
+	public Double visitOutput(implParser.OutputContext ctx){
+
+		Double v=visit(ctx.e);
+		System.out.println(v);
+
+		return null;
+	}
 
 	//WhileLoop
 	public Double visitWhileLoop(implParser.WhileLoopContext ctx){
@@ -147,7 +174,7 @@ class Interpreter extends AbstractParseTreeVisitor<Double> implements implVisito
 		}
 
 		return null;
-	};
+	}
 
 	//IfStatement
 	public Double visitIfStatement(implParser.IfStatementContext ctx){
@@ -156,7 +183,7 @@ class Interpreter extends AbstractParseTreeVisitor<Double> implements implVisito
 			visit(ctx.p);
 
 		return null;
-	};
+	}
 
 	//ForLoop
 	public Double visitForLoop(implParser.ForLoopContext ctx){
@@ -171,8 +198,9 @@ class Interpreter extends AbstractParseTreeVisitor<Double> implements implVisito
 			env.setVariable(id, i + 0.0);
 			visit(ctx.p);
 		}
+
 		return null;
-	};
+	}
 
 	// -- CONDITIONS --
 
@@ -188,7 +216,8 @@ class Interpreter extends AbstractParseTreeVisitor<Double> implements implVisito
 
     // ==
     public Double visitEqual(implParser.EqualContext ctx){
-		Double v1=visit(ctx.e1);
+
+    	Double v1=visit(ctx.e1);
 		Double v2=visit(ctx.e2);
 
 		if (v1.equals(v2)) return 1.0;
@@ -197,7 +226,8 @@ class Interpreter extends AbstractParseTreeVisitor<Double> implements implVisito
 
 	// <
 	public Double visitLessThan(implParser.LessThanContext ctx){
-		Double v1=visit(ctx.e1);
+
+    	Double v1=visit(ctx.e1);
 		Double v2=visit(ctx.e2);
 
 		if (v1 < v2) return 1.0;
@@ -206,7 +236,8 @@ class Interpreter extends AbstractParseTreeVisitor<Double> implements implVisito
 
 	// >
 	public Double visitGreaterThan(implParser.GreaterThanContext ctx){
-		Double v1=visit(ctx.e1);
+
+    	Double v1=visit(ctx.e1);
 		Double v2=visit(ctx.e2);
 
 		if (v1 > v2) return 1.0;
@@ -215,7 +246,8 @@ class Interpreter extends AbstractParseTreeVisitor<Double> implements implVisito
 
 	// <=
 	public Double visitLessThanOrEqual(implParser.LessThanOrEqualContext ctx){
-		Double v1=visit(ctx.e1);
+
+    	Double v1=visit(ctx.e1);
 		Double v2=visit(ctx.e2);
 
 		if (v1 <= v2) return 1.0;
@@ -224,7 +256,8 @@ class Interpreter extends AbstractParseTreeVisitor<Double> implements implVisito
 
 	// >=
 	public Double visitGreaterThanOrEqual(implParser.GreaterThanOrEqualContext ctx){
-		Double v1=visit(ctx.e1);
+
+    	Double v1=visit(ctx.e1);
 		Double v2=visit(ctx.e2);
 
 		if (v1 >= v2) return 1.0;
@@ -263,7 +296,7 @@ class Interpreter extends AbstractParseTreeVisitor<Double> implements implVisito
 	// ()
 	public Double visitParenthesisCondition(implParser.ParenthesisConditionContext ctx){
 		return visit(ctx.c);
-	};
+	}
 
 }
 

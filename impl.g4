@@ -50,9 +50,3 @@ NUM   : [0-9] ;
 WHITESPACE : [ \n\t\r]+ -> skip;
 COMMENT    : '//'~[\n]*  -> skip;
 COMMENT2   : '/*' (~[*] | '*'~[/]  )*   '*/'  -> skip;
-
-/* Ændret til MulDev og AddSub. Lavet prefix. Dunno about condition in condition - oprindelige stod der expr '||' expr, men tror ikke det gav mening 
-FLOAT I for loop skal ændres. Ret fejlbeskeder i terminalen 
-Hvorfor/hvordan virker parenteser?
-Hvad med indexer der kan være floats??
-*/
