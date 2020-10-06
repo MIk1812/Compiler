@@ -99,8 +99,10 @@ class Interpreter extends AbstractParseTreeVisitor<Double> implements implVisito
     };
 
     public Double visitPrefix(implParser.PrefixContext ctx){
-		String sign = ctx.s.getText();
-		Double num = Double.parseDouble(ctx.e.getText())
+
+    	String sign = ctx.s.getText();
+		Double num = Double.parseDouble(ctx.e.getText());
+
 		if(sign.equals("+"))
 			return num;
 		else
