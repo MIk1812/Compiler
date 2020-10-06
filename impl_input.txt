@@ -1,0 +1,54 @@
+/* Example program for the imperative language impl */
+
+
+
+n= -2 + 3;
+output n;
+
+
+
+
+
+
+
+
+
+//out = 0;
+//a[1]=3;
+//out = a[1];
+//output out;
+
+
+
+//for(i=2..5){result = result + i;}
+
+
+
+
+
+
+
+//if(3 != 4 != 5) then {
+//	result=2;
+//};
+
+
+//a=;
+//output a;
+
+//if(!(3!=4)) then result = 1;
+
+
+//a=10;
+//b=2;
+//result=a/b;
+
+//result=a*(b);
+
+//n=5;
+//result=1;
+//while(n!=0){
+//  result=result*n;
+//  n=n+(-1);
+//}
+
