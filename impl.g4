@@ -10,9 +10,9 @@ program : c=command                      # SingleCommand
 	
 command : x=ID '=' e=expr ';'	         				# Assignment
 	| x=ID '[' e1=expr ']' '=' e2=expr ';'				# ArraySet
-	| 'output' e=expr ';'            				# Output
-        | 'while' '('c=condition')' p=program 	 			# WhileLoop
-	| 'if' '('c=condition')' 'then'? p=program 			# IfStatement
+	| 'output' e=expr ';'             				# Output
+        | 'while' '(' c=condition ')' p=program 	 		# WhileLoop
+	| 'if' '(' c=condition ')' 'then'? p=program 			# IfStatement
 	| 'for' '(' x=ID '=' n1=expr '..' n2=expr ')' p=program 	# ForLoop
 	;
 	
@@ -25,15 +25,15 @@ expr	: c=FLOAT     	      		# Constant
 	| '(' e=expr ')'      		# ParenthesisExpr
 	;
 
-condition : 	  e1=expr '!=' e2=expr 			# Unequal
+condition 	: '!' c=condition			# Not
+		| c1=condition '&&' c2=condition 	# And
+		| c1=condition '||' c2=condition 	# Or
+		| e1=expr '!=' e2=expr 			# Unequal
 	  	| e1=expr '==' e2=expr 			# Equal
 		| e1=expr '<' e2=expr 			# LessThan
 		| e1=expr '>' e2=expr 			# GreaterThan
 		| e1=expr '<=' e2=expr 			# LessThanOrEqual
 		| e1=expr '>=' e2=expr 			# GreaterThanOrEqual
-		| '!' c=condition			# Not
-		| c1=condition '&&' c2=condition 	# And
-		| c1=condition '||' c2=condition 	# Or
 		| '(' c=condition ')'			# ParenthesisCondition
 	  	;  
 

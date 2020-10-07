@@ -33,8 +33,8 @@ public class implParser extends Parser {
 	private static String[] makeLiteralNames() {
 		return new String[] {
 			null, "'{'", "'}'", "'='", "';'", "'['", "']'", "'output'", "'while'", 
-			"'('", "')'", "'if'", "'then'", "'for'", "'..'", "'!='", "'=='", "'<'", 
-			"'>'", "'<='", "'>='", "'!'", "'&&'", "'||'"
+			"'('", "')'", "'if'", "'then'", "'for'", "'..'", "'!'", "'&&'", "'||'", 
+			"'!='", "'=='", "'<'", "'>'", "'<='", "'>='"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -902,6 +902,26 @@ public class implParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
+	public static class NotContext extends ConditionContext {
+		public ConditionContext c;
+		public ConditionContext condition() {
+			return getRuleContext(ConditionContext.class,0);
+		}
+		public NotContext(ConditionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof implListener ) ((implListener)listener).enterNot(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof implListener ) ((implListener)listener).exitNot(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof implVisitor ) return ((implVisitor<? extends T>)visitor).visitNot(this);
+			else return visitor.visitChildren(this);
+		}
+	}
 	public static class LessThanContext extends ConditionContext {
 		public ExprContext e1;
 		public ExprContext e2;
@@ -923,26 +943,6 @@ public class implParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof implVisitor ) return ((implVisitor<? extends T>)visitor).visitLessThan(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class NotContext extends ConditionContext {
-		public ConditionContext c;
-		public ConditionContext condition() {
-			return getRuleContext(ConditionContext.class,0);
-		}
-		public NotContext(ConditionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof implListener ) ((implListener)listener).enterNot(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof implListener ) ((implListener)listener).exitNot(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof implVisitor ) return ((implVisitor<? extends T>)visitor).visitNot(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1131,92 +1131,92 @@ public class implParser extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,8,_ctx) ) {
 			case 1:
 				{
-				_localctx = new UnequalContext(_localctx);
+				_localctx = new NotContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
 				setState(101);
-				((UnequalContext)_localctx).e1 = expr(0);
-				setState(102);
 				match(T__14);
-				setState(103);
-				((UnequalContext)_localctx).e2 = expr(0);
+				setState(102);
+				((NotContext)_localctx).c = condition(10);
 				}
 				break;
 			case 2:
 				{
-				_localctx = new EqualContext(_localctx);
+				_localctx = new UnequalContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
+				setState(103);
+				((UnequalContext)_localctx).e1 = expr(0);
+				setState(104);
+				match(T__17);
 				setState(105);
-				((EqualContext)_localctx).e1 = expr(0);
-				setState(106);
-				match(T__15);
-				setState(107);
-				((EqualContext)_localctx).e2 = expr(0);
+				((UnequalContext)_localctx).e2 = expr(0);
 				}
 				break;
 			case 3:
 				{
-				_localctx = new LessThanContext(_localctx);
+				_localctx = new EqualContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
+				setState(107);
+				((EqualContext)_localctx).e1 = expr(0);
+				setState(108);
+				match(T__18);
 				setState(109);
-				((LessThanContext)_localctx).e1 = expr(0);
-				setState(110);
-				match(T__16);
-				setState(111);
-				((LessThanContext)_localctx).e2 = expr(0);
+				((EqualContext)_localctx).e2 = expr(0);
 				}
 				break;
 			case 4:
 				{
-				_localctx = new GreaterThanContext(_localctx);
+				_localctx = new LessThanContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
+				setState(111);
+				((LessThanContext)_localctx).e1 = expr(0);
+				setState(112);
+				match(T__19);
 				setState(113);
-				((GreaterThanContext)_localctx).e1 = expr(0);
-				setState(114);
-				match(T__17);
-				setState(115);
-				((GreaterThanContext)_localctx).e2 = expr(0);
+				((LessThanContext)_localctx).e2 = expr(0);
 				}
 				break;
 			case 5:
 				{
-				_localctx = new LessThanOrEqualContext(_localctx);
+				_localctx = new GreaterThanContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
+				setState(115);
+				((GreaterThanContext)_localctx).e1 = expr(0);
+				setState(116);
+				match(T__20);
 				setState(117);
-				((LessThanOrEqualContext)_localctx).e1 = expr(0);
-				setState(118);
-				match(T__18);
-				setState(119);
-				((LessThanOrEqualContext)_localctx).e2 = expr(0);
+				((GreaterThanContext)_localctx).e2 = expr(0);
 				}
 				break;
 			case 6:
 				{
-				_localctx = new GreaterThanOrEqualContext(_localctx);
+				_localctx = new LessThanOrEqualContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
+				setState(119);
+				((LessThanOrEqualContext)_localctx).e1 = expr(0);
+				setState(120);
+				match(T__21);
 				setState(121);
-				((GreaterThanOrEqualContext)_localctx).e1 = expr(0);
-				setState(122);
-				match(T__19);
-				setState(123);
-				((GreaterThanOrEqualContext)_localctx).e2 = expr(0);
+				((LessThanOrEqualContext)_localctx).e2 = expr(0);
 				}
 				break;
 			case 7:
 				{
-				_localctx = new NotContext(_localctx);
+				_localctx = new GreaterThanOrEqualContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
+				setState(123);
+				((GreaterThanOrEqualContext)_localctx).e1 = expr(0);
+				setState(124);
+				match(T__22);
 				setState(125);
-				match(T__20);
-				setState(126);
-				((NotContext)_localctx).c = condition(4);
+				((GreaterThanOrEqualContext)_localctx).e2 = expr(0);
 				}
 				break;
 			case 8:
@@ -1251,11 +1251,11 @@ public class implParser extends Parser {
 						((AndContext)_localctx).c1 = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_condition);
 						setState(133);
-						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
+						if (!(precpred(_ctx, 9))) throw new FailedPredicateException(this, "precpred(_ctx, 9)");
 						setState(134);
-						match(T__21);
+						match(T__15);
 						setState(135);
-						((AndContext)_localctx).c2 = condition(4);
+						((AndContext)_localctx).c2 = condition(10);
 						}
 						break;
 					case 2:
@@ -1264,11 +1264,11 @@ public class implParser extends Parser {
 						((OrContext)_localctx).c1 = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_condition);
 						setState(136);
-						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
+						if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
 						setState(137);
-						match(T__22);
+						match(T__16);
 						setState(138);
-						((OrContext)_localctx).c2 = condition(3);
+						((OrContext)_localctx).c2 = condition(9);
 						}
 						break;
 					}
@@ -1312,9 +1312,9 @@ public class implParser extends Parser {
 	private boolean condition_sempred(ConditionContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 2:
-			return precpred(_ctx, 3);
+			return precpred(_ctx, 9);
 		case 3:
-			return precpred(_ctx, 2);
+			return precpred(_ctx, 8);
 		}
 		return true;
 	}
@@ -1348,19 +1348,19 @@ public class implParser extends Parser {
 		"\13\2\2VW\5\b\5\2WX\7\f\2\2XZ\3\2\2\2YK\3\2\2\2YM\3\2\2\2YO\3\2\2\2YP"+
 		"\3\2\2\2YU\3\2\2\2Zc\3\2\2\2[\\\f\b\2\2\\]\7\32\2\2]b\5\b\5\t^_\f\7\2"+
 		"\2_`\7\33\2\2`b\5\b\5\ba[\3\2\2\2a^\3\2\2\2be\3\2\2\2ca\3\2\2\2cd\3\2"+
-		"\2\2d\t\3\2\2\2ec\3\2\2\2fg\b\6\1\2gh\5\b\5\2hi\7\21\2\2ij\5\b\5\2j\u0086"+
-		"\3\2\2\2kl\5\b\5\2lm\7\22\2\2mn\5\b\5\2n\u0086\3\2\2\2op\5\b\5\2pq\7\23"+
-		"\2\2qr\5\b\5\2r\u0086\3\2\2\2st\5\b\5\2tu\7\24\2\2uv\5\b\5\2v\u0086\3"+
-		"\2\2\2wx\5\b\5\2xy\7\25\2\2yz\5\b\5\2z\u0086\3\2\2\2{|\5\b\5\2|}\7\26"+
-		"\2\2}~\5\b\5\2~\u0086\3\2\2\2\177\u0080\7\27\2\2\u0080\u0086\5\n\6\6\u0081"+
-		"\u0082\7\13\2\2\u0082\u0083\5\n\6\2\u0083\u0084\7\f\2\2\u0084\u0086\3"+
-		"\2\2\2\u0085f\3\2\2\2\u0085k\3\2\2\2\u0085o\3\2\2\2\u0085s\3\2\2\2\u0085"+
-		"w\3\2\2\2\u0085{\3\2\2\2\u0085\177\3\2\2\2\u0085\u0081\3\2\2\2\u0086\u008f"+
-		"\3\2\2\2\u0087\u0088\f\5\2\2\u0088\u0089\7\30\2\2\u0089\u008e\5\n\6\6"+
-		"\u008a\u008b\f\4\2\2\u008b\u008c\7\31\2\2\u008c\u008e\5\n\6\5\u008d\u0087"+
-		"\3\2\2\2\u008d\u008a\3\2\2\2\u008e\u0091\3\2\2\2\u008f\u008d\3\2\2\2\u008f"+
-		"\u0090\3\2\2\2\u0090\13\3\2\2\2\u0091\u008f\3\2\2\2\r\17\31\35;IYac\u0085"+
-		"\u008d\u008f";
+		"\2\2d\t\3\2\2\2ec\3\2\2\2fg\b\6\1\2gh\7\21\2\2h\u0086\5\n\6\fij\5\b\5"+
+		"\2jk\7\24\2\2kl\5\b\5\2l\u0086\3\2\2\2mn\5\b\5\2no\7\25\2\2op\5\b\5\2"+
+		"p\u0086\3\2\2\2qr\5\b\5\2rs\7\26\2\2st\5\b\5\2t\u0086\3\2\2\2uv\5\b\5"+
+		"\2vw\7\27\2\2wx\5\b\5\2x\u0086\3\2\2\2yz\5\b\5\2z{\7\30\2\2{|\5\b\5\2"+
+		"|\u0086\3\2\2\2}~\5\b\5\2~\177\7\31\2\2\177\u0080\5\b\5\2\u0080\u0086"+
+		"\3\2\2\2\u0081\u0082\7\13\2\2\u0082\u0083\5\n\6\2\u0083\u0084\7\f\2\2"+
+		"\u0084\u0086\3\2\2\2\u0085f\3\2\2\2\u0085i\3\2\2\2\u0085m\3\2\2\2\u0085"+
+		"q\3\2\2\2\u0085u\3\2\2\2\u0085y\3\2\2\2\u0085}\3\2\2\2\u0085\u0081\3\2"+
+		"\2\2\u0086\u008f\3\2\2\2\u0087\u0088\f\13\2\2\u0088\u0089\7\22\2\2\u0089"+
+		"\u008e\5\n\6\f\u008a\u008b\f\n\2\2\u008b\u008c\7\23\2\2\u008c\u008e\5"+
+		"\n\6\13\u008d\u0087\3\2\2\2\u008d\u008a\3\2\2\2\u008e\u0091\3\2\2\2\u008f"+
+		"\u008d\3\2\2\2\u008f\u0090\3\2\2\2\u0090\13\3\2\2\2\u0091\u008f\3\2\2"+
+		"\2\r\17\31\35;IYac\u0085\u008d\u008f";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

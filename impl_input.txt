@@ -1,9 +1,31 @@
 /* Example program for impl that tests  of the features required in
 the assignment */
 
-x=20;
-y=5;
-z=7;
-if(x<=z && y==5 || !(y>7) && x>z){
-output y;
+n=49;
+k=6;
+result=1;
+
+while(n!=k && k!=0){
+  result=result*n/k;
+  n=n-1;
+  k=k-1;
+}   
+
+output result;
+
+n=100;
+
+for(i=2..n){
+  a[i]=1;
+}
+
+for(i=2..n){
+  if(a[i]==1){
+    output i;
+    j=2*i;
+    while(j<n){
+      a[j]=0;
+      j=j+i;
+    }
+  }
 }
