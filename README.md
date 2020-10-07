@@ -8,7 +8,7 @@
 ***
 
 <center><font size="6">02332 Compilerteknik</font></center>
-
+<center>9-10-2020</center>
 
 <br>
 <br>
@@ -20,26 +20,19 @@
 
 
 <br><br>
-
+[Github](https://github.com/MIk1812/Compiler)
 ---
 
 ### Task 1
 
-```
-Test the calculator on several inputs:
-does it always compute the desired result,
-especially when we mix several operators without parentheses?
-```
+Det regulære udtryk for *FLOAT* i det udleverede materiale forhindrede at man skrev *a=5-1*; man skulle skrive *a=5+(-1)*. Dette skyldtes, at *FLOAT* tillod +/- som præfix, hvilket resulterede i, at lexeren genkendte *5* og *-1* som selvstændige tokens uden nogen egentlig operator imellem. 
 
-Den udleverede *FLOAT* i .g4 vil ikke tillade at man skriver *a=5-1*, man skal skrive *a=5+(-1)*. Dette skyldes, at minus oprindeligt blev tilladt som præfix på floats, hvorfor lexeren genkendte *5* og *-1* som selvstændige tokens uden nogen egentlig operator imellem. 
-
-For at tillade *a=5-1* skal *FLOAT* ændres fra: `FLOAT : '-'? NUM+ ('.' NUM+)? ;` til `FLOAT :  NUM+ ('.' NUM+)? ;`
-Men dette gør, at man ikke kan sætte en variable til *a=-5* uden at sige *a=0-5*.
-For at tillade *a=-5* skal der tilføjes en ny *expr* kaldt `# Prefix`, den tjekker for om der står *+* eller *-* foran en FLOAT.
+For at tillade *a=5-1*, ændrede vi *FLOAT* fra: `FLOAT : '-'? NUM+ ('.' NUM+)? ;` til `FLOAT :  NUM+ ('.' NUM+)? ;`
+Dette bevirkede imidlertid, at man ikke kunne sætte en variable til *a=-5*.
+For at tillade denne syntaks, tilføjede vi en ny production i vores context-free gramma, *expr*, kaldt `# Prefix`, der tillader et *+* eller *-* foran en FLOAT.
 
 Rettet til:
 ```ANTLR
-
 expr	: c=FLOAT     	      		# Constant
 	| e1=expr s=MULDEV e2=expr 	# MulDev
 	| e1=expr s=ADDSUB e2=expr 	# AddSub
@@ -54,28 +47,22 @@ MULDEV : ('*'|'/') ;
 ADDSUB : ('+'|'-') ;
 FLOAT : NUM+ ('.' NUM+)? ;
 ```
-`MULDEV : ('*'|'/') ;` og `ADDSUB : ('+'|'-') ;` gør at multiplikation,division og addition,substraktion bliver vægtet lige. Gramatiken behandes i main.java filen med if og else sætninger. Fordi `MULDEV : ('*'|'/') ;` kommer før `ADDSUB : ('+'|'-') ;` så vil den blive prioriteret højere.  På denne måde kan man håndtere de forskellige bindinger i vores grammatik.
+De regulære udtryk `MULDEV : ('*'|'/') ;` og `ADDSUB : ('+'|'-') ;` gør det muligt at vægte multiplikation/division og addition/substraktion lige i vores grammatik - altså sikre, at ligestillede operatorere korrekt associeres fra venstre mod højre. Desuden, fordi `MULDEV : ('*'|'/') ;` er angivet før `ADDSUB : ('+'|'-') ;` i ovenstående, vil den blive prioriteret højere. På denne måde sikre vi også, at vores operatorere får den rigtige precedence. Testcase 8 i bilagene demonstrerer netop dette.
 
 ### Task 2
 
-![](https://i.imgur.com/xrhu10W.png)
+I task 2 lavede vi en teoretisk løsning til implementeringen af conditional branching (if-then), for-loops og arrays. Dette blev gjort i en kopi af vores grammatik fil.
 
-
-For task 2 har vi lavet en teoretisk løsning til implementeringen af: *if then*, *for(i=0..2)* og *a[e]*
-Dette er kun blevet gjort i en kopi af vores grammatik fil.
-
-Teoretisk grammatik
+Teoretisk grammatik:
 ```ANTLR
-command : x=ID '=' e=expr ';'	         				# Assignment
-	| x=ID '[' e1=expr ']' '=' e2=expr ';'			# ArraySet
-	| 'output' e=expr ';'            				# Output
-        | 'while' '('c=condition')' p=program 	 		# WhileLoop
-	| 'if' '('c=condition')' 'then'? p=program 			# IfStatement
-	| 'for' '(' x=expr '=' n1=expr '..' n2=expr ')' p=program 	# ForLoop
+command :  x=ID '[' e1=expr ']' '=' e2=expr ';'                      # ArraySet
+        | 'if' '('c=condition')' 'then'? p=program 			# IfStatement
+        | 'for' '(' x=expr '=' n1=expr '..' n2=expr ')' p=program 	# ForLoop
 	;
+    
+expr : x=ID '[' e=expr ']'     # ArrayGet
 ```
-#### Update
-ForLoop er ændret så man kan genkende variablen som forloopet iterer. Variablen kan nu defineres i Environment: `env.setVariable(id, i + 0.0);`
+For-loop'et blev efterfølgende ændret, så variablen der itereres over ikke er en expr, men derimod et ID, idet førstnævnte ikke gav mening. Variablen kunne da senere defineres i *Environment* i java via `env.setVariable(id, i + 0.0);`
 ```ANTLR
 | 'for' '(' x=ID '=' n1=expr '..' n2=expr ')' p=program 	# ForLoop
 ```
@@ -83,33 +70,44 @@ ForLoop er ændret så man kan genkende variablen som forloopet iterer. Variable
 
 ### Task 3
 
-Task 2 terorien er blevet brugt til at lave funktionaliteten for if then*, *for(i=0..2)* og *a[e]*
-Der er rykket rundt i rækkefølgen under *expr* og multiplikation og division, addition og subtraktion er blevet lagt sammen (MulDiv, AddSub) så rækkefølgen af udregningerne er korrekte.
-Vi har lavet ekstra conditions i vores grammatik fil for at understøtte: (*==, <=, >=, <, >, !,!(), ||, &&*)
+Task 3  blev primært brugt til at implementere funktionaliteten fra task 2: *if then*, *for(i=0..n)* og *a[i]*. Vi lavede ekstra conditions i vores grammatik fil for at understøtte boolske udtryk bedre (*==, <=, >=, <, >, !, (), ||, &&*)
 
-Conditions
+
 ```ANTLR
-condition      : e1=expr '!=' e2=expr 	        # Unequal
-	  	| e1=expr '==' e2=expr 		# Equal
-		| e1=expr '<' e2=expr 			# LessThan
-		| e1=expr '>' e2=expr 			# GreaterThan
-		| e1=expr '<=' e2=expr 		# LessThanOrEqual
-		| e1=expr '>=' e2=expr 		# GreaterThanOrEqual
+condition 	: '!' c=condition			# Not
 		| c1=condition '&&' c2=condition 	# And
 		| c1=condition '||' c2=condition 	# Or
-		| '!' c=condition			# Not
+		| e1=expr '!=' e2=expr 		# Unequal
+	  	| e1=expr '==' e2=expr 		# Equal
+		| e1=expr '<' e2=expr 			# LessThan
+		| e1=expr '>' e2=expr 	    	       # GreaterThan
+		| e1=expr '<=' e2=expr                # LessThanOrEqual
+		| e1=expr '>=' e2=expr 		# GreaterThanOrEqual
 		| '(' c=condition ')'			# ParenthesisCondition
-	  	; 
+	  	;  
 ```
+Til at teste den implementerede funktionalitet, udviklede vi en række små test, som alle er dokumenteret i bilagene. Vi benyttede også parse-tree en del; her ses det for testcase 9:
+
+```java=
+x=20; y=5; z=7;
+if(x<=z && y==5 && x>5 || !(y>7) && x>z)
+output y;
+```
+
+![](https://i.imgur.com/KEwt8id.png)
+
+Træet viser hvordan compileren forstår ovenstående kode. Interpreteren besøger hver knude og udfører den logik der er beskrevet i *main.java*. Bemærk hvordan "not" binder stærkere end "and" og "and" binder stærkere end "or", samt hvordan der associeres fra venstre mod højre, grundet den korrekte sortering af produktionerne i grammaen.  
+
+
 
 ### Task 4
 
-Task 4 blevt udført parralelt med Task 3, alt funktionalitet bortset fra arrays var blevet implementeret i Task 3.
+Task 4 blevt udført parralelt med Task 3, alt funktionalitet i form a javakode bortset fra arrays var blevet implementeret i Task 3.
 #### Java main implementation
 ```ANTLR=
 | x=ID '[' e1=expr ']' '=' e2=expr ';'	  # ArraySet
 ```
-
+I dette eksemple vises, at vi har en regel/produktion, der hedder ArraySet række (non)-terminale symboler hvortil der er knyttet labels, eks. "x=ID". ANTLR kombinerer disse elementer for at generere visitors med forskellige contexts (ctx). Ved hjælp af en context har vi adgang til alle labels inklusive tekst i en enkelt regel. 
 ```Java=
 public Double visitArraySet(implParser.ArraySetContext ctx){
 
@@ -123,14 +121,13 @@ public Double visitArraySet(implParser.ArraySetContext ctx){
 	}
 ```
 
-Her vises array implementation for vores kode, vi bruger den 'trick' beskrives i guiden. Nemlig at man giver hele expression a[5] som et variable navn og dette gøres ved hjælp af Environment klasse der har en metode setVariable. 
+Her vises array implementation for vores kode, vi bruger det 'trick', som beskrives i guiden. Nemlig at man giver hele expression eks. a[index] som et variable navn og dette gøres ved hjælp af Environment klasse der har en metode setVariable. 
 
-linje 3--ved hjælp af ctx tager vi fat i x variable fra g4 file og dermed kalder getText() der returnere den string, x peger på.
+Ovenfor vises at, vi kalder visit () på labels e1 og e2, hvis man kigger på det i forhold til parse træet, går metoden gennem træet, indtil den møder et "leaf", værdien returneres, afhængigt af hvor vi kalder visit() metoden.
 
-linje 4-- For at tage fat i hviklet værdi har expr kalder vi visit() metode der returnere en double, som så bliver parset til int for index værdi af array ikke skal være en double.
+Bemærk: På linje 4 caster vi værdien til integer, fordi den repræsentere index for en array og derfor ikke må skrives som et double.
 
-
-
+linje 7-- kaldes setVariable() metode som så tager hele variable navn samt værdien som man gerne vil gemme.
 
 
 
@@ -140,16 +137,14 @@ linje 4-- For at tage fat i hviklet værdi har expr kalder vi visit() metode der
 
 
 
-### Testcase 1
+### Testcase 1 
 
-Vægtning af multiplikation og addition kontrolleres.
+Vægtning af multiplikation og addition kontrolleres
 
 ```java=
 n=10;
 result=0;
-
 result=(n-5)*2+10;
-
 output result;
 ``` 
 
@@ -159,17 +154,18 @@ output result;
 
 ### Testcase 2
 
-To variabler initaliseres med værdier 4 og 2. Derefter en if statement kontrolleres med to forskellige conditons med en or i midten.
+If-statement kontrolleres i forbindelse med boolske udtryk
 
 ```java=
 n=4;
 k=2;
-if(n>k || n>0){
+
+if(n>k || n>0)
 n=n-1;
-}
-if(n>k && n-1==k){
+
+if(n>k && n-1==k)
 n=n-1;
-}
+
 output n;
 ```
 
@@ -181,7 +177,7 @@ output n;
     
 ### Testcase 3
 
-Variabler initaliseres for a, b, result og n. Matematisk operation foretages i mellem variablerne over flere gange ved hjælp af for loop. Reultat læses når for loopet kørt færdig.
+For-loop kontrolleres
 
 ```java=
 a=2;
@@ -205,7 +201,7 @@ output result;
 
 ### Testcase 4
 
-Array af længde n opereres hvor hver array elementer har værdien iterationsnummer. Derefter array element  a[7] kontrolleres.
+Arrays kontrolleres
 
 ```java=
 n=10;
@@ -222,7 +218,7 @@ output a[7];
 
 ### Testcase 5
 
-To variable initaliseres for at angive længde af en array og en vilkårlig tal. Array a itereres igennem og initaliseres med iterations nummer. Output aflæses ved hjælp af angive variabel navn a[k+2].
+Arrays kontrolleres
 
 ```java=
 n=10;
@@ -241,7 +237,7 @@ output a[k+2];
 
 ### Testcase 6
 
-Result bliver initaliseret som 10. Der bliver testet for om en not (!) expression bliver udført korrekt.
+Not (!) kontrolleres
 
 ```java=
 result = 10;
@@ -254,6 +250,8 @@ output result;
 | 0.0       | 0.0      |
 
 ### Testcase 7
+
+Not (!) kontrolleres
 
 ```java=
 result = 10;
@@ -278,21 +276,21 @@ output -6+4*8/2-(3*5+1-2+3-4-2/17*5-1+(-4))*3;
 
 | Forventet | Resultat |
 | --------- | -------- |
-| -12,235   | -12,235  |
+| -12.235   | -12.235  |
+
+Parse-træet kan med fordel også studeres her, hvor alt ser ud til at tjekke ud:
+![](https://i.imgur.com/ZXNpn4V.png)
+
 
 
 ### Testcase 9
 
-Tester precedence og associativitet i boolske udtryk.
-Tester Logical 'And' og 'Or' Her ses hvordan 'not' bindes stærkere end 'and' og 'and' bindes stærkere end 'or'. 
+Tester precedence og associativitet i boolske udtryk. Det ses hvordan 'not' bindes stærkere end 'and' og 'and' bindes stærkere end 'or' samt hvordan der associeres fra venstre mod højre.
 
 ```java=
-x=20;
-y=5;
-z=7;
-if(x<=z && y==5 || !(y>7) && x>z){
+x=20; y=5; z=7;
+if(x<=z && y==5 && x>5 || !(y>7) && x>z)
 output y;
-}
 ```
 
 
@@ -303,7 +301,7 @@ output y;
 
 ### Testcase 10
 
-En array længde initaliseres samt med en array af tilfældig defineret tal. For at koden kan køre er man nød til at implementere a[-1] . Dette gør at conditon i while lykken ikke fejler da vores parser kan ellers ikke finde variabel a[-1] i miljøet. Insertionsort algoritmen implementeres. Output kontrolleres for korrekte sortering. 
+Insertion-sort algoritmen her implementeret og testet. For at koden kan køre, er vi nødt til at definere a[-1], grundet vores lidt begrænsede grammatik. Dette gør, at conditon i while lykken ikke fejler, da vores parser ellers ikke kan finde variabel a[-1] i miljøet. Output kontrolleres for korrekte sortering. 
 
 ```java=
 n=5;
@@ -335,7 +333,7 @@ output a[i];
 | 5.0, 6.0, 11.0, 12.0, 13.0         | 5.0, 6.0, 11.0, 12.0, 13.0 |
 
 ### Testcase 11
-Vi tester den udleverede input.txt fil
+Vi tester den udleverede impl_input.txt fil
 
 ```java
 /* Example program for the imperative language impl */
