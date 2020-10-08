@@ -1,6 +1,7 @@
 /* Example program for impl that tests  of the features required in
 the assignment */
 
+
 n=49;
 k=6;
 result=1;

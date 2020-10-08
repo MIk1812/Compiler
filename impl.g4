@@ -17,14 +17,14 @@ command : x=ID '=' e=expr ';'	         				# Assignment
 	;
 	
 expr	: c=FLOAT     	      		# Constant
-	| e1=expr s=MULDEV e2=expr 	# MulDev
-	| e1=expr s=ADDSUB e2=expr 	# AddSub
-	| s=ADDSUB e=FLOAT		# Prefix
 	| x=ID		      		# Variable
 	| x=ID '[' e=expr ']'		# ArrayGet
+	| s=ADDSUB e=FLOAT		# Prefix
+	| e1=expr s=MULDEV e2=expr 	# MulDev
+	| e1=expr s=ADDSUB e2=expr 	# AddSub	
 	| '(' e=expr ')'      		# ParenthesisExpr
 	;
-
+ 
 condition 	: '!' c=condition			# Not
 		| c1=condition '&&' c2=condition 	# And
 		| c1=condition '||' c2=condition 	# Or

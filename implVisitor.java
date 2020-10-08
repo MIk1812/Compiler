@@ -128,19 +128,19 @@ public interface implVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitUnequal(implParser.UnequalContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code Not}
-	 * labeled alternative in {@link implParser#condition}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNot(implParser.NotContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code LessThan}
 	 * labeled alternative in {@link implParser#condition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitLessThan(implParser.LessThanContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Not}
+	 * labeled alternative in {@link implParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNot(implParser.NotContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ParenthesisCondition}
 	 * labeled alternative in {@link implParser#condition}.
