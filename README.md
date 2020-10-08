@@ -89,7 +89,7 @@ condition 	: '!' c=condition			# Not
 ```
 Til at teste den implementerede funktionalitet, udviklede vi en række små test, som alle er dokumenteret i bilagene. Vi benyttede også parse-tree en del; her ses det for testcase 9:
 
-```java=
+```java
 x=20; y=5; z=7;
 if(x<=z && y==5 && x>5 || !(y>7) && x>z)
 output y;
@@ -105,11 +105,11 @@ Træet viser hvordan compileren forstår ovenstående kode. Interpreteren besøg
 
 Task 4 blevt udført parralelt med Task 3, alt funktionalitet i form af javakode bortset fra arrays var blevet implementeret i Task 3.
 #### Java main implementation
-```ANTLR=
+```ANTLR
 | x=ID '[' e1=expr ']' '=' e2=expr ';'	  # ArraySet
 ```
 I dette eksemple vises, at vi har en regel/produktion, der hedder ArraySet bestående af (non)-terminale symboler hvortil der flere steder er knyttet labels, eks. "x=ID". ANTLR kombinerer disse elementer for at generere visitors med forskellige contexts (ctx). Ved hjælp af en context har vi adgang til alle labels inklusive tekst i en enkelt regel. 
-```Java=
+```Java
 public Double visitArraySet(implParser.ArraySetContext ctx){
 
     String id = ctx.x.getText();
@@ -142,7 +142,7 @@ linje 7-- kaldes setVariable() metode som så tager hele variable navn samt vær
 
 Vægtning af multiplikation og addition kontrolleres
 
-```java=
+```java
 n=10;
 result=0;
 result=(n-5)+10*2;
@@ -157,7 +157,7 @@ output result;
 
 If-statement kontrolleres i forbindelse med boolske udtryk
 
-```java=
+```java
 n=4;
 k=2;
 
@@ -180,7 +180,7 @@ output n;
 
 For-loop kontrolleres
 
-```java=
+```java
 a=2;
 b=3;
 result=6;
@@ -204,7 +204,7 @@ output result;
 
 Arrays kontrolleres
 
-```java=
+```java
 n=10;
 
 for(i=0..n){
@@ -221,7 +221,7 @@ output a[7];
 
 Arrays kontrolleres
 
-```java=
+```java
 n=10;
 k=3;
 for(i=0..n){
@@ -240,7 +240,7 @@ output a[k+2];
 
 Not (!) kontrolleres
 
-```java=
+```java
 result = 10;
 if(!(4<3)) then result = 0;
 output result;
@@ -254,7 +254,7 @@ output result;
 
 Not (!) kontrolleres
 
-```java=
+```java
 result = 10;
 if(!(2<3)) then result = 0;
 output result;
@@ -271,7 +271,7 @@ Tester precedence og associativitet i
 aritmetiske udtryk når flere operatorer blandes med og uden parentes. Pga. vores #Prefix løsning under "expr" i vores .g4-fil, er det desuden muligt at starte udtrykket med et minus.
 
 
-```java=
+```java
 output -6+4*8/2-(3*5+1-2+3-4-2/17*5-1+(-4))*3;
 ```
 
@@ -288,7 +288,7 @@ Parse-træet kan med fordel også studeres her, hvor alt ser ud til at tjekke ud
 
 Tester precedence og associativitet i boolske udtryk. Det ses hvordan 'not' bindes stærkere end 'and' og 'and' bindes stærkere end 'or' samt hvordan der associeres fra venstre mod højre.
 
-```java=
+```java
 x=20; y=5; z=7;
 if(x<=z && y==5 && x>5 || !(y>7) && x>z)
 output y;
@@ -304,7 +304,7 @@ output y;
 
 Insertion-sort algoritmen her implementeret og testet. For at koden kan køre, er vi nødt til at definere a[-1], grundet vores lidt begrænsede grammatik. Dette gør, at conditon i while lykken ikke fejler, da vores parser ellers ikke kan finde variabel a[-1] i miljøet. Output kontrolleres for korrekte sortering. 
 
-```java=
+```java
 n=5;
 
 a[-1]=99999999999;
@@ -357,7 +357,7 @@ output result;
 Vi tester den udleverede impl_additional.txt fil
 
 
-```java= 
+```java 
 /* Example program for impl that tests  of the features required in
 the assignment */
 
