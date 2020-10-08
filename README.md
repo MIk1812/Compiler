@@ -1,5 +1,5 @@
 <center>
-<img src="https://i.imgur.com/mIFqWgX.png" alt="img" width="200" />
+<img src="https://i.imgur.com/mIFqWgX.png" alt="img" width="150" />
 
 </center>
 <br><br>
@@ -34,20 +34,21 @@ For at tillade denne syntaks, tilføjede vi en ny production i vores context-fre
 Rettet til:
 ```ANTLR
 expr	: c=FLOAT     	      		# Constant
-	| e1=expr s=MULDEV e2=expr 	# MulDev
-	| e1=expr s=ADDSUB e2=expr 	# AddSub
-	| s=ADDSUB e=FLOAT		# Prefix
 	| x=ID		      		# Variable
 	| x=ID '[' e=expr ']'		# ArrayGet
+	| s=ADDSUB e=FLOAT		# Prefix
+	| e1=expr s=MULDEV e2=expr 	# MulDev
+	| e1=expr s=ADDSUB e2=expr 	# AddSub	
 	| '(' e=expr ')'      		# ParenthesisExpr
 	;
-
 
 MULDEV : ('*'|'/') ;
 ADDSUB : ('+'|'-') ;
 FLOAT : NUM+ ('.' NUM+)? ;
 ```
 De regulære udtryk `MULDEV : ('*'|'/') ;` og `ADDSUB : ('+'|'-') ;` gør det muligt at vægte multiplikation/division og addition/substraktion lige i vores grammatik - altså sikre, at ligestillede operatorere korrekt associeres fra venstre mod højre. Desuden, fordi `MULDEV : ('*'|'/') ;` er angivet før `ADDSUB : ('+'|'-') ;` i ovenstående, vil den blive prioriteret højere. På denne måde sikre vi også, at vores operatorere får den rigtige precedence. Testcase 8 i bilagene demonstrerer netop dette.
+
+Bemærk, eftersom ANTLR tillægger rækkefølgen af produktioner betydning, har vi generelt forsøgt at prioritere vores grammatik ift. "tiltrækning", der hvor det giver mening. 
 
 ### Task 2
 
@@ -102,12 +103,12 @@ Træet viser hvordan compileren forstår ovenstående kode. Interpreteren besøg
 
 ### Task 4
 
-Task 4 blevt udført parralelt med Task 3, alt funktionalitet i form a javakode bortset fra arrays var blevet implementeret i Task 3.
+Task 4 blevt udført parralelt med Task 3, alt funktionalitet i form af javakode bortset fra arrays var blevet implementeret i Task 3.
 #### Java main implementation
 ```ANTLR=
 | x=ID '[' e1=expr ']' '=' e2=expr ';'	  # ArraySet
 ```
-I dette eksemple vises, at vi har en regel/produktion, der hedder ArraySet række (non)-terminale symboler hvortil der er knyttet labels, eks. "x=ID". ANTLR kombinerer disse elementer for at generere visitors med forskellige contexts (ctx). Ved hjælp af en context har vi adgang til alle labels inklusive tekst i en enkelt regel. 
+I dette eksemple vises, at vi har en regel/produktion, der hedder ArraySet bestående af (non)-terminale symboler hvortil der flere steder er knyttet labels, eks. "x=ID". ANTLR kombinerer disse elementer for at generere visitors med forskellige contexts (ctx). Ved hjælp af en context har vi adgang til alle labels inklusive tekst i en enkelt regel. 
 ```Java=
 public Double visitArraySet(implParser.ArraySetContext ctx){
 
@@ -125,7 +126,7 @@ Her vises array implementation for vores kode, vi bruger det 'trick', som beskri
 
 Ovenfor vises at, vi kalder visit () på labels e1 og e2, hvis man kigger på det i forhold til parse træet, går metoden gennem træet, indtil den møder et "leaf", værdien returneres, afhængigt af hvor vi kalder visit() metoden.
 
-Bemærk: På linje 4 caster vi værdien til integer, fordi den repræsentere index for en array og derfor ikke må skrives som et double.
+Bemærk: På linje 4 caster vi værdien til integer, fordi den repræsentere index for et array og derfor ikke må skrives som et double.
 
 linje 7-- kaldes setVariable() metode som så tager hele variable navn samt værdien som man gerne vil gemme.
 
@@ -144,13 +145,13 @@ Vægtning af multiplikation og addition kontrolleres
 ```java=
 n=10;
 result=0;
-result=(n-5)*2+10;
+result=(n-5)+10*2;
 output result;
 ``` 
 
 | Forventet | Resultat |
 | --------- | -------- |
-| 20.0      | 20.0     |
+| 25.0      | 25.0     |
 
 ### Testcase 2
 
